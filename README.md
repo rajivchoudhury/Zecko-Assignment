@@ -22,5 +22,7 @@ and to start compliling enter
 npm start
 ```
 
+you can access the spreadsheet <a href="https://docs.google.com/spreadsheets/d/11VHJUxzyRzlC0Dn9gZp4OyA1pSk9b-PgScBL38LTKgg/edit?usp=sharing"></a>
+
 ### NOTE 
 This will not be able to compile without the credentials.json and that file is not shared due to security reasons.
