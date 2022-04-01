@@ -22,5 +22,5 @@ and to start compliling enter
 npm start
 ```
 
-# NOTE 
+### NOTE 
 This will not be able to compile without the credentials.json and that file is not shared due to security reasons.
