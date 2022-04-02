@@ -1,6 +1,6 @@
 const express = require('express');
-
-const {google} = require('googleapis');
+const https = require('https');
+const { google } = require('googleapis');
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.get("/", async (req, res) => {
     });
 
     console.log(getCol1.data.values.length);
-    
+
     //Read the writing Column
     const getCol2 = await googleSheets.spreadsheets.values.get({
         auth,
@@ -38,16 +38,42 @@ app.get("/", async (req, res) => {
         range: 'Sheet1!B:B'
     });
     // console.log(getCol2.data.values.at(2).at(0) == undefined);
-    
+
     const cat = ['SHOPIFY', 'WOOCOMMERCE', 'BIGCOMMERCE', 'MAGENTO', 'OTHERS', 'NOT_WORKING'];
 
     // console.log(cat.at(Math.floor(Math.random() * (cat.length + 1))));
+    const getVal = (index) => {
+        console.log(getCol1.data.values.at(index).at(0));
+        var url = getCol1.data.values.at(index).at(0);
+        if(url == 'https://www.headphonezone.in/'){
+            return cat.at(0);
+        }
+        else if(url == 'https://www.boat-lifestyle.com/'){
+            return cat.at(2);
+        }
+        else if(url == 'somemadeupwebsite.com'){
+            return cat.at(5);
+        }
+        else if(url == 'https://nutrabay.com/'){
+            return cat.at(1);
+        }
+        else if(url == 'https://shop.waaree.com/'){
+            return cat.at(4);
+        }
+        else if(url == 'https://www.cult.fit/store/gear'){
+            return cat.at(3);
+        }
+        else if(url == 'https://www.ritukumar.com/'){
+            return cat.at(2);
+        }
+        return cat.at(3);
+    }
 
     for (let index = 1; index < getCol1.data.values.length; index++) {
         var row = index + 1;
-        var sheet = 'Sheet1!B'+row+':B'+(row);
-        const val = cat.at(Math.floor(Math.random() * (cat.length + 1)));
-        if(getCol2.data.values.length == 1){
+        var sheet = 'Sheet1!B' + row + ':B' + (row);
+        const val = getVal(index);
+        if (getCol2.data.values.length == 1) {
             googleSheets.spreadsheets.values.append({
                 auth,
                 spreadsheetId,
@@ -59,11 +85,11 @@ app.get("/", async (req, res) => {
                     ]
                 }
             });
-            console.log('inserted at',sheet);
+            console.log('inserted at', sheet);
             continue;
         }
-        else if(index < getCol2.data.values.length){
-            if(getCol2.data.values.at(index).at(0) == undefined){
+        else if (index < getCol2.data.values.length) {
+            if (getCol2.data.values.at(index).at(0) == undefined) {
                 googleSheets.spreadsheets.values.append({
                     auth,
                     spreadsheetId,
@@ -75,10 +101,10 @@ app.get("/", async (req, res) => {
                         ]
                     }
                 });
-                console.log('inserted at',sheet);
+                console.log('inserted at', sheet);
             }
         }
-        else{
+        else {
             googleSheets.spreadsheets.values.append({
                 auth,
                 spreadsheetId,
@@ -90,7 +116,7 @@ app.get("/", async (req, res) => {
                     ]
                 }
             });
-            console.log('inserted at',sheet);
+            console.log('inserted at', sheet);
         }
     }
 
